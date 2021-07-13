@@ -56,6 +56,10 @@ class Imagick extends AbstractLib implements LibInterface
     }
 
     public function PespectivaLivre ($controlPoints){
+        $this->image->setImageFormat('png');
+        $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT );
+        $this->image->setImageMatte(true);
+
         return $this->image->distortImage(BaseImagick::DISTORTION_PERSPECTIVE, $controlPoints, true);
     }
 
