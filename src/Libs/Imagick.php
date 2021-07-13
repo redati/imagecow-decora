@@ -317,9 +317,11 @@ class Imagick extends AbstractLib implements LibInterface
      */
     public function rotate($angle)
     {
-        if ($this->image->rotateImage(new BaseImagickPixel('#FFFFFF'), $angle) !== true) {
+        if ($this->image->rotateImage(new BaseImagickPixel('#00000000'), $angle) !== true) {
             throw new ImageException('There was an error rotating the image');
         }
+
+ 
 
         $this->image->setImagePage(0, 0, 0, 0);
     }
