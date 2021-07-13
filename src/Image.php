@@ -136,8 +136,8 @@ class Image
         return $this->image->pesp($x,$y);
     }
 
-    public function distortImage($x,$y){
-        return $this->image->distortImage($x,$y);
+    public function PespectivaLivre($controlPoints){
+        return $this->image->PespectivaLivre($controlPoints);
     }
     public function transformImageColorspace($color){
         return $this->image->transformImageColorspace($color);

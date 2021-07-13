@@ -87,6 +87,8 @@ interface LibInterface
 
     public function pesp($x,$y);
 
+    public function PespectivaLivre($controlPoints);
+
     public function transformImageColorspace($color);
 
     public function getCompressed();
