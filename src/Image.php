@@ -135,6 +135,10 @@ class Image
     public function pesp($x,$y){
         return $this->image->pesp($x,$y);
     }
+
+    public function distortImage($controlPoints){
+        return $this->image->distortImage($controlPoints);
+    }
     public function transformImageColorspace($color){
         return $this->image->transformImageColorspace($color);
     }

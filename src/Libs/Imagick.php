@@ -28,32 +28,33 @@ class Imagick extends AbstractLib implements LibInterface
      */
 
 
-    public function pesp($x,$y)
+    public function pesp($controlPoints)
     {
 
      $this->image->setImageFormat('png');
      $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT );
      $this->image->setImageMatte(true);
 
-     $xt = ($x * $this->image->getImageHeight()) / 100;
-     $xy = ($y * $this->image->getImageHeight()) / 100;
+    // $xt = ($x * $this->image->getImageHeight()) / 100;
+    // $xy = ($y * $this->image->getImageHeight()) / 100;
 
     /* Perform the distortion */ 
-    $controlPoints = array(
-        0,0, 0,0,
-        $this->image->getImageHeight(), 0, 
-        $this->image->getImageHeight(), $xt,
+    //$controlPoints = array(
+    //    0,0, 0,0,
+    //    $this->image->getImageHeight(), 0, 
+    //    $this->image->getImageHeight(), $xt,
 
-        $this->image->getImageHeight(), $this->image->getImageHeight(), 
-        $this->image->getImageHeight(), $xy, 
+    //    $this->image->getImageHeight(), $this->image->getImageHeight(), 
+     //   $this->image->getImageHeight(), $xy, 
 
-        0,$this->image->getImageHeight(), 0,$this->image->getImageHeight()
-    );
+    //    0,$this->image->getImageHeight(), 0,$this->image->getImageHeight()
+    //);
 
      return $this->image->distortImage(BaseImagick::DISTORTION_PERSPECTIVE, $controlPoints, true);
 
          
     }
+
 
     public function transformImageColorspace($color)
     {
