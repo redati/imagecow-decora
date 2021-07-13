@@ -85,7 +85,7 @@ interface LibInterface
      */
     public function resize($width, $height);
 
-    public function pesp($controlPoints);
+    public function pesp($x,$y);
 
     public function transformImageColorspace($color);
 
