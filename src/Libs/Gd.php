@@ -9,6 +9,14 @@ use Imagecow\ImageException;
  */
 class Gd extends AbstractLib implements LibInterface
 {
+    public function pesp($x,$y) {}
+
+    public function PespectivaLivre($controlPoints) {}
+
+    public function transformImageColorspace($color) {}
+
+    public function getCompressed() {}
+
     public static $fallbackCropMethods = [
         'Entropy' => ['center', 'middle'],
         'Balanced' => ['center', 'middle'],

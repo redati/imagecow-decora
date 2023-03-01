@@ -91,7 +91,7 @@ interface LibInterface
 
     public function transformImageColorspace($color);
 
-    public function getCompressed();
+    public function getCompressed();  
 
     /**
      * Calculates automatically the x,y positions of a crop using a specific method.
