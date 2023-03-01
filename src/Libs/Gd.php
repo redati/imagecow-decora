@@ -160,7 +160,7 @@ class Gd extends AbstractLib implements LibInterface
      */
     public function getWidth()
     {
-        return imagesx($this->image) > 0 ? imagesx($this->image) : 0;
+        return imagesx($this->image) > 0 ? imagesx($this->image) : 1;
     }
 
     /**
@@ -168,7 +168,7 @@ class Gd extends AbstractLib implements LibInterface
      */
     public function getHeight()
     {
-        return imagesy($this->image) > 0 ? imagesy($this->image) : 0;
+        return imagesy($this->image) > 0 ? imagesy($this->image) : 1;
     }
 
     /**
