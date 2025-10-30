@@ -18,10 +18,11 @@
 		"issues": "https://github.com/oscarotero/imagecow/issues"
 	},
 	"require": {
-		"php": ">=5.5"
+		"php": "*",
+        "ext-gd": "*"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^4.8|^6.2"
+		"phpunit/phpunit": "*"
 	},
 	"scripts": {
 		"test": "phpunit"
