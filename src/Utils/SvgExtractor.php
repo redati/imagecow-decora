@@ -63,8 +63,8 @@ class SvgExtractor
 
         $blob = $this->image->getImageBlob();
 
-        $blob = preg_replace('/<svg([^>]*) width="([^"]*)"/si', '<svg$1 width="'.$width.'px"', $blob);
-        $blob = preg_replace('/<svg([^>]*) height="([^"]*)"/si', '<svg$1 height="'.$height.'px"', $blob);
+        $blob = preg_replace('/<svg([^>]*) width="([^"]*)"/si', '<svg$1 width="' . $width . 'px"', $blob);
+        $blob = preg_replace('/<svg([^>]*) height="([^"]*)"/si', '<svg$1 height="' . $height . 'px"', $blob);
 
         $image->readImageBlob($blob);
         $image->setImageFormat('png');

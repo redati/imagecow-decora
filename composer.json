@@ -2,7 +2,9 @@
 	"name": "redati/imagecow-decora",
 	"type": "library",
 	"description": "PHP library to manipulate and generate responsive images",
-	"keywords": ["image"],
+	"keywords": [
+		"image"
+	],
 	"homepage": "https://github.com/oscarotero/imagecow/",
 	"license": "MIT",
 	"authors": [
@@ -19,7 +21,7 @@
 	},
 	"require": {
 		"php": "*",
-        "ext-gd": "*"
+		"ext-imagick": "*"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "*"

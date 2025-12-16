@@ -124,7 +124,7 @@ class Dimmensions
         }
 
         //Offset
-        $offset = isset($split[2]) ? $split[1].$split[2] : 0;
+        $offset = isset($split[2]) ? $split[1] . $split[2] : 0;
 
         if (is_numeric($offset)) {
             $offset = (int) $offset;

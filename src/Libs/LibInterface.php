@@ -2,7 +2,7 @@
 
 namespace Imagecow\Libs;
 
-use Imagecow\ImageException;
+use Exception;
 
 /**
  * Interface implemented by all libraries.
@@ -36,10 +36,13 @@ interface LibInterface
 
     /**
      * Saves the image in a file.
-     *
-     * @param string $filename Name of the file where the image will be saved. If it's not defined, The original file will be overwritten.
+     * Name of the file where the image will be saved
+     * If it's not defined, The original file will be overwritten.
+     * @param string $filename
      */
     public function save($filename);
+
+    public function blur($loops);
 
     /**
      * Gets the image data in a string.
@@ -85,13 +88,13 @@ interface LibInterface
      */
     public function resize($width, $height);
 
-    public function pesp($x,$y);
+    public function pesp($x, $y);
 
     public function PespectivaLivre($controlPoints);
 
     public function transformImageColorspace($color);
 
-    public function getCompressed();  
+    public function getCompressed();
 
     /**
      * Calculates automatically the x,y positions of a crop using a specific method.
@@ -100,7 +103,7 @@ interface LibInterface
      * @param int    $height The new height of the image
      * @param string $method The method name (for example: "Entropy")
      *
-     * @throws ImageException if the method is not available
+     * @throws Exception if the method is not available
      *
      * @return array [x, y]
      */
@@ -140,7 +143,7 @@ interface LibInterface
 
     /**
      * Applies a watermark image.
-     * 
+     *
      * @param LibInterface $image
      * @param int          $x     The horizontal position
      * @param int          $y     The vertical position

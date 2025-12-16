@@ -4,7 +4,7 @@ namespace Imagecow\Libs;
 
 use Imagick as BaseImagick;
 use ImagickPixel as BaseImagickPixel;
-use Imagecow\ImageException;
+use Exception;
 
 /**
  * Imagick library.
@@ -28,36 +28,45 @@ class Imagick extends AbstractLib implements LibInterface
      */
 
 
-    public function pesp($x,$y)
+    public function pesp($x, $y)
     {
 
-     $this->image->setImageFormat('png');
-     $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT );
-     $this->image->setImageMatte(true);
+        $this->image->setImageFormat('png');
+        $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT);
+        $this->image->setImageMatte(true);
 
-     $xt = ($x * $this->image->getImageHeight()) / 100;
-     $xy = ($y * $this->image->getImageHeight()) / 100;
+        $xt = ($x * $this->image->getImageHeight()) / 100;
+        $xy = ($y * $this->image->getImageHeight()) / 100;
 
-    /* Perform the distortion */ 
-    $controlPoints = array(
-        0,0, 0,0,
-        $this->image->getImageHeight(), 0, 
-        $this->image->getImageHeight(), $xt,
+        /* Perform the distortion */
+        $controlPoints = array(
+            0,
+            0,
+            0,
+            0,
+            $this->image->getImageHeight(),
+            0,
+            $this->image->getImageHeight(),
+            $xt,
 
-        $this->image->getImageHeight(), $this->image->getImageHeight(), 
-        $this->image->getImageHeight(), $xy, 
+            $this->image->getImageHeight(),
+            $this->image->getImageHeight(),
+            $this->image->getImageHeight(),
+            $xy,
 
-        0,$this->image->getImageHeight(), 0,$this->image->getImageHeight()
-    );
+            0,
+            $this->image->getImageHeight(),
+            0,
+            $this->image->getImageHeight()
+        );
 
-     return $this->image->distortImage(BaseImagick::DISTORTION_PERSPECTIVE, $controlPoints, true);
-
-         
+        return $this->image->distortImage(BaseImagick::DISTORTION_PERSPECTIVE, $controlPoints, true);
     }
 
-    public function PespectivaLivre ($controlPoints){
+    public function PespectivaLivre($controlPoints)
+    {
         $this->image->setImageFormat('png');
-        $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT );
+        $this->image->setImageVirtualPixelMethod(BaseImagick::VIRTUALPIXELMETHOD_TRANSPARENT);
         $this->image->setImageMatte(true);
 
         return $this->image->distortImage(BaseImagick::DISTORTION_PERSPECTIVE, $controlPoints, true);
@@ -65,20 +74,16 @@ class Imagick extends AbstractLib implements LibInterface
 
     public function transformImageColorspace($color)
     {
-        if ($color == 'rgb' ){
-
+        if ($color == 'rgb') {
             $this->image->transformImageColorspace(BaseImagick::COLORSPACE_SRGB);
-            $icc = file_get_contents(__DIR__.'/profiles/AdobeRGB1998.icc');
+            $icc = file_get_contents(__DIR__ . '/profiles/AdobeRGB1998.icc');
             $this->image->profileImage('icc', $icc);
-
         } else {
-
             $this->image->transformImageColorspace(BaseImagick::COLORSPACE_CMYK);
-            $icc = file_get_contents(__DIR__.'/profiles/JapanWebCoated.icc');
+            $icc = file_get_contents(__DIR__ . '/profiles/JapanWebCoated.icc');
             $this->image->profileImage('icc', $icc);
             //correção após conversão
-            $this->image->brightnessContrastImage(5,15);
-
+            $this->image->brightnessContrastImage(5, 15);
         }
         return $this->image;
     }
@@ -88,7 +93,7 @@ class Imagick extends AbstractLib implements LibInterface
         $imagick = new BaseImagick();
 
         if ($imagick->readImage($filename) !== true) {
-            throw new ImageException("The image file '{$filename}' cannot be loaded");
+            throw new Exception("The image file '{$filename}' cannot be loaded");
         }
 
         return new static($imagick);
@@ -125,10 +130,10 @@ class Imagick extends AbstractLib implements LibInterface
         $profiles = $this->image->getImageProfiles('*', false);
 
         if (array_search('icc', $profiles) === false) {
-            $this->image->profileImage('icc', file_get_contents(__DIR__.'/icc/us_web_uncoated.icc'));
+            $this->image->profileImage('icc', file_get_contents(__DIR__ . '/icc/us_web_uncoated.icc'));
         }
 
-        $this->image->profileImage('icm', file_get_contents(__DIR__.'/icc/srgb.icm'));
+        $this->image->profileImage('icm', file_get_contents(__DIR__ . '/icc/srgb.icm'));
         $this->image->transformImageColorspace(BaseImagick::COLORSPACE_SRGB);
     }
 
@@ -146,7 +151,7 @@ class Imagick extends AbstractLib implements LibInterface
     public function flip()
     {
         if ($this->image->flipImage() !== true) {
-            throw new ImageException('There was an error on flip the image');
+            throw new Exception('There was an error on flip the image');
         }
     }
 
@@ -156,7 +161,7 @@ class Imagick extends AbstractLib implements LibInterface
     public function flop()
     {
         if ($this->image->flopImage() !== true) {
-            throw new ImageException('There was an error on flop the image');
+            throw new Exception('There was an error on flop the image');
         }
     }
 
@@ -168,7 +173,7 @@ class Imagick extends AbstractLib implements LibInterface
         $image = $this->image;
 
         if (!$image->writeImage($filename)) {
-            throw new ImageException("The image file '{$filename}' cannot be saved");
+            throw new Exception("The image file '{$filename}' cannot be saved");
         }
     }
 
@@ -194,7 +199,7 @@ class Imagick extends AbstractLib implements LibInterface
         }
 
         if (!($fp = fopen($file = tempnam(sys_get_temp_dir(), 'imagick'), 'w'))) {
-            throw new ImageException('Cannot create a temp file to generate the string data image');
+            throw new Exception('Cannot create a temp file to generate the string data image');
         }
 
         $image->writeImagesFile($fp);
@@ -257,7 +262,7 @@ class Imagick extends AbstractLib implements LibInterface
         }
 
         if ($this->image->setImageFormat($format) !== true) {
-            throw new ImageException("The image format '{$format}' is not valid");
+            throw new Exception("The image format '{$format}' is not valid");
         }
     }
 
@@ -276,7 +281,7 @@ class Imagick extends AbstractLib implements LibInterface
             $this->image = $this->image->deconstructImages();
         } else {
             if ($this->image->scaleImage($width, $height) !== true) {
-                throw new ImageException('There was an error resizing the image');
+                throw new Exception('There was an error resizing the image');
             }
 
             $this->image->setImagePage(0, 0, 0, 0);
@@ -288,10 +293,10 @@ class Imagick extends AbstractLib implements LibInterface
      */
     public function getCropOffsets($width, $height, $method)
     {
-        $class = 'Imagecow\\Crops\\'.ucfirst(strtolower($method));
+        $class = 'Imagecow\\Crops\\' . ucfirst(strtolower($method));
 
         if (!class_exists($class)) {
-            throw new ImageException("The crop method '$method' is not available for Imagick");
+            throw new Exception("The crop method '$method' is not available for Imagick");
         }
 
         return $class::getOffsets($this->image, $width, $height);
@@ -313,7 +318,7 @@ class Imagick extends AbstractLib implements LibInterface
             $this->image = $this->image->deconstructImages();
         } else {
             if ($this->image->cropImage($width, $height, $x, $y) !== true) {
-                throw new ImageException('There was an error cropping the image');
+                throw new Exception('There was an error cropping the image');
             }
 
             $this->image->setImagePage(0, 0, 0, 0);
@@ -326,10 +331,10 @@ class Imagick extends AbstractLib implements LibInterface
     public function rotate($angle)
     {
         if ($this->image->rotateImage(new BaseImagickPixel('#00000000'), $angle) !== true) {
-            throw new ImageException('There was an error rotating the image');
+            throw new Exception('There was an error rotating the image');
         }
 
- 
+
 
         $this->image->setImagePage(0, 0, 0, 0);
     }

@@ -3,16 +3,14 @@
 namespace Imagecow;
 
 use Imagecow\Utils\Dimmensions;
+use Exception;
 
 class Image
 {
-    const LIB_GD = 'Gd';
-    const LIB_IMAGICK = 'Imagick';
+    public const LIB_IMAGICK = 'Imagick';
 
-    const CROP_ENTROPY = 'Entropy';
-    const CROP_BALANCED = 'Balanced';
-    const CROP_FACE = 'Face';
-
+    public const CROP_ENTROPY = 'Entropy';
+    public const CROP_BALANCED = 'Balanced';
     protected $image;
     protected $filename;
     protected $clientHints = [
@@ -25,7 +23,7 @@ class Image
      * Static function to create a new Imagecow instance from an image file.
      *
      * @param string $filename The path of the file
-     * @param string $library  The name of the image library to use (Gd or Imagick). If it's not defined, detects automatically the library to use.
+     * @param string $library  Imagick
      *
      * @return Image
      */
@@ -54,7 +52,7 @@ class Image
      * Static function to create a new Imagecow instance from a binary string.
      *
      * @param string $string  The string of the image
-     * @param string $library The name of the image library to use (Gd or Imagick). If it's not defined, detects automatically the library to use.
+     * @param string $library Imagick
      *
      * @return Image
      */
@@ -106,7 +104,7 @@ class Image
         $normalize = [];
 
         foreach ($clientHints as $key => $value) {
-            $normalize[strtolower($key)] = is_null($value) ? null : (float) $value;
+            $normalize[strtolower($key)] = \is_null($value) ? null : (float) $value;
         }
 
         if (array_diff_key($normalize, $this->clientHints)) {
@@ -132,17 +130,21 @@ class Image
         return $this;
     }
 
-    public function pesp($x,$y){
-        return $this->image->pesp($x,$y);
+    public function pesp($x, $y)
+    {
+        return $this->image->pesp($x, $y);
     }
 
-    public function PespectivaLivre($controlPoints){
+    public function PespectivaLivre($controlPoints)
+    {
         return $this->image->PespectivaLivre($controlPoints);
     }
-    public function transformImageColorspace($color){
+    public function transformImageColorspace($color)
+    {
         return $this->image->transformImageColorspace($color);
     }
-    public function getCompressed(){
+    public function getCompressed()
+    {
         return $this->image->getCompressed();
     }
 
@@ -214,8 +216,9 @@ class Image
 
     /**
      * Saves the image in a file.
-     *
-     * @param string $filename Name of the file where the image will be saved. If it's not defined, The original file will be overwritten.
+     * Name of the file where the image will be saved.
+     * If it's not defined, The original file will be overwritten.     *
+     * @param string $filename
      *
      * @return self
      */
@@ -318,10 +321,10 @@ class Image
     /**
      * Crops the image.
      *
-     * @param int|string $width  The new width of the image. It can be a number (pixels) or percentaje
-     * @param int|string $height The new height of the image. It can be a number (pixels) or percentaje
-     * @param int|string $x      The "x" position to crop. It can be number (pixels), percentaje, [left, center, right] or one of the Image::CROP_* constants
-     * @param int|string $y      The "y" position to crop. It can be number (pixels), percentaje or [top, middle, bottom]
+     * @param int|string $width The new width. It a number (px) or percentaje
+     * @param int|string $height The new height. It a number (px) or percentaje
+     * @param int|string $x The "x" crop. (px), percentaje, [left, center, right] or Image::CROP_*
+     * @param int|string $y The "y" crop. (px), percentaje or [top, middle, bottom]
      *
      * @return self
      */
@@ -335,7 +338,7 @@ class Image
 
         list($width, $height) = $this->calculateClientSize($width, $height);
 
-        if (in_array($x, [self::CROP_BALANCED, self::CROP_ENTROPY, self::CROP_FACE], true)) {
+        if (\in_array($x, [self::CROP_BALANCED, self::CROP_ENTROPY], true)) {
             list($x, $y) = $this->image->getCropOffsets($width, $height, $x);
         }
 
@@ -350,10 +353,10 @@ class Image
     /**
      * Adjust the image to the given dimmensions. Resizes and crops the image maintaining the proportions.
      *
-     * @param int|string $width  The new width in number (pixels) or percentaje
-     * @param int|string $height The new height in number (pixels) or percentaje
-     * @param int|string $x      The "x" position to crop. It can be number (pixels), percentaje, [left, center, right] or one of the Image::CROP_* constants
-     * @param int|string $y      The "y" position to crop. It can be number (pixels), percentaje or [top, middle, bottom]
+     * @param int|string $width The new width in number (px) or percentaje
+     * @param int|string $height The new height in number (px) or percentaje
+     * @param int|string $x The "x" crop. It number (px), percentaje, [left, center, right] or one of the Image::CROP_*
+     * @param int|string $y The "y" crop. It number (px), percentaje or [top, middle, bottom]
      *
      * @return self
      */
@@ -523,10 +526,6 @@ class Image
                         case 'CROP_BALANCED':
                             $operation['params'][2] = self::CROP_BALANCED;
                             break;
-
-                        case 'CROP_FACE':
-                            $operation['params'][2] = self::CROP_FACE;
-                            break;
                     }
 
                     break;
@@ -544,7 +543,7 @@ class Image
     public function show()
     {
         if (($string = $this->getString()) && ($mimetype = $this->getMimeType())) {
-            header('Content-Type: '.$mimetype);
+            header('Content-Type: ' . $mimetype);
             die($string);
         }
     }
@@ -606,7 +605,8 @@ class Image
 
     /**
      * Check whether the image is an animated gif.
-     * Copied from: https://github.com/Sybio/GifFrameExtractor/blob/master/src/GifFrameExtractor/GifFrameExtractor.php#L181.
+     * Copied from:
+     * https://github.com/Sybio/GifFrameExtractor/blob/master/src/GifFrameExtractor/GifFrameExtractor.php#L181.
      *
      * @param resource A stream pointer opened by fopen()
      *
@@ -642,7 +642,7 @@ class Image
             $function = strtolower(trim(array_shift($params)));
 
             if (!in_array($function, $valid_operations, true)) {
-                throw new ImageException("The transform function '{$function}' is not valid");
+                throw new Exception("The transform function '{$function}' is not valid");
             }
 
             $return[] = [
@@ -659,24 +659,28 @@ class Image
      *
      * @param string $library The library name (Gd, Imagick)
      *
-     * @throws ImageException if the image library does not exists.
+     * @throws Exception if the image library does not exists.
      *
      * @return string
      */
     private static function getLibraryClass($library)
     {
-        if (!$library) {
-            $library = Libs\Imagick::checkCompatibility() ? self::LIB_IMAGICK : self::LIB_GD;
+        if (!Libs\Imagick::checkCompatibility()) {
+            throw new Exception('The image library Imagick is not installed in this computer');
         }
 
-        $class = 'Imagecow\\Libs\\'.$library;
+        if (!$library) {
+            $library = self::LIB_IMAGICK;
+        }
+
+        $class = 'Imagecow\\Libs\\' . $library;
 
         if (!class_exists($class)) {
-            throw new ImageException('The image library is not valid');
+            throw new Exception('The image library is not valid');
         }
 
         if (!$class::checkCompatibility()) {
-            throw new ImageException("The image library '$library' is not installed in this computer");
+            throw new Exception("The image library '$library' is not installed in this computer");
         }
 
         return $class;

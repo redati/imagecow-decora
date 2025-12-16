@@ -23,7 +23,7 @@ use Imagecow\Utils\Color;
  */
 class Entropy implements CropInterface
 {
-    const POTENTIAL_RATIO = 1.5;
+    public const POTENTIAL_RATIO = 1.5;
 
     /**
      * {@inheritdoc}

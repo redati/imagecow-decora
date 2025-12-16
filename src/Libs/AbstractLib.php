@@ -33,6 +33,6 @@ abstract class AbstractLib
      */
     public function setAnimated($animated)
     {
-        $this->animated = (boolean) $animated;
+        $this->animated = (bool) $animated;
     }
 }
